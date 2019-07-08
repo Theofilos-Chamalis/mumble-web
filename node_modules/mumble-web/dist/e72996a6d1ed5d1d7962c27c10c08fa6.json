@@ -1,0 +1,17 @@
+{
+	"name": "Mumble",
+	"icons": [
+		{
+			"src": "5b70c2cbbd6e9258a632c70b03381627.png",
+			"sizes": "192x192",
+			"type": "image\/png"
+		},
+		{
+			"src": "80250154041d2e9f6d50a91181409f21.png",
+			"sizes": "512x512",
+			"type": "image\/png"
+		}
+	],
+	"theme_color": "#ffffff",
+	"display": "standalone"
+}
