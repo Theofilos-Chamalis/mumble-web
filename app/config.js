@@ -5,21 +5,21 @@
 window.mumbleWebConfig = {
   // Which fields to show on the Connect to Server dialog
   'connectDialog': {
-    'address': true,
+    'address': false,
     'port': true,
-    'token': true,
+    'token': false,
     'username': true,
     'password': true
   },
   // Default values for user settings
   // You can see your current value by typing `localStorage.getItem('mumble.$setting')` in the web console.
   'settings': {
-    'voiceMode': 'vad', // one of 'cont' (Continuous), 'ptt' (Push-to-Talk), 'vad' (Voice Activity Detection)
+    'voiceMode': 'ptt', // one of 'cont' (Continuous), 'ptt' (Push-to-Talk), 'vad' (Voice Activity Detection)
     'pttKey': 'ctrl + shift',
     'vadLevel': 0.3,
     'toolbarVertical': false,
     'showAvatars': 'always', // one of 'always', 'own_channel', 'linked_channel', 'minimal_only', 'never'
-    'userCountInChannelName': false,
+    'userCountInChannelName': true,
     'audioBitrate': 40000, // bits per second
     'samplesPerPacket': 960
   },

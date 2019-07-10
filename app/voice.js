@@ -7,7 +7,7 @@ import vad from 'voice-activity-detection'
 import DropStream from 'drop-stream'
 
 class VoiceHandler extends Writable {
-  constructor (client, settings) {
+  constructor(client, settings) {
     super({ objectMode: true })
     this._client = client
     this._settings = settings
@@ -15,14 +15,14 @@ class VoiceHandler extends Writable {
     this._mute = false
   }
 
-  setMute (mute) {
+  setMute(mute) {
     this._mute = mute
     if (mute) {
       this._stopOutbound()
     }
   }
 
-  _getOrCreateOutbound () {
+  _getOrCreateOutbound() {
     if (this._mute) {
       throw new Error('tried to send audio while self-muted')
     }
@@ -41,7 +41,7 @@ class VoiceHandler extends Writable {
     return this._outbound
   }
 
-  _stopOutbound () {
+  _stopOutbound() {
     if (this._outbound) {
       this.emit('stopped_talking')
       this._outbound.end()
@@ -49,18 +49,18 @@ class VoiceHandler extends Writable {
     }
   }
 
-  _final (callback) {
+  _final(callback) {
     this._stopOutbound()
     callback()
   }
 }
 
 export class ContinuousVoiceHandler extends VoiceHandler {
-  constructor (client, settings) {
+  constructor(client, settings) {
     super(client, settings)
   }
 
-  _write (data, _, callback) {
+  _write(data, _, callback) {
     if (this._mute) {
       callback()
     } else {
@@ -70,7 +70,7 @@ export class ContinuousVoiceHandler extends VoiceHandler {
 }
 
 export class PushToTalkVoiceHandler extends VoiceHandler {
-  constructor (client, settings) {
+  constructor(client, settings) {
     super(client, settings)
     this._key = settings.pttKey
     this._pushed = false
@@ -82,7 +82,7 @@ export class PushToTalkVoiceHandler extends VoiceHandler {
     keyboardjs.bind(this._key, this._keydown_handler, this._keyup_handler)
   }
 
-  _write (data, _, callback) {
+  _write(data, _, callback) {
     if (this._pushed && !this._mute) {
       this._getOrCreateOutbound().write(data, callback)
     } else {
@@ -90,7 +90,7 @@ export class PushToTalkVoiceHandler extends VoiceHandler {
     }
   }
 
-  _final (callback) {
+  _final(callback) {
     super._final(e => {
       keyboardjs.unbind(this._key, this._keydown_handler, this._keyup_handler)
       callback(e)
@@ -99,21 +99,21 @@ export class PushToTalkVoiceHandler extends VoiceHandler {
 }
 
 export class VADVoiceHandler extends VoiceHandler {
-  constructor (client, settings) {
+  constructor(client, settings) {
     super(client, settings)
     let level = settings.vadLevel
     const self = this
     this._vad = vad(audioContext(), theUserMedia, {
-      onVoiceStart () {
+      onVoiceStart() {
         console.log('vad: start')
         self._active = true
       },
-      onVoiceStop () {
+      onVoiceStop() {
         console.log('vad: stop')
         self._stopOutbound()
         self._active = false
       },
-      onUpdate (val) {
+      onUpdate(val) {
         self._level = val
         self.emit('level', val)
       },
@@ -128,7 +128,7 @@ export class VADVoiceHandler extends VoiceHandler {
     this._backlogLengthMin = 1024 * 6 * 4 // vadBufferLen * (vadDelay + 1) * bytesPerSample
   }
 
-  _write (data, _, callback) {
+  _write(data, _, callback) {
     if (this._active && !this._mute) {
       if (this._backlog.length > 0) {
         for (let oldData of this._backlog) {
@@ -150,7 +150,7 @@ export class VADVoiceHandler extends VoiceHandler {
     }
   }
 
-  _final (callback) {
+  _final(callback) {
     super._final(e => {
       this._vad.destroy()
       callback(e)
@@ -160,7 +160,7 @@ export class VADVoiceHandler extends VoiceHandler {
 
 var theUserMedia = null
 
-export function initVoice (onData, onUserMediaError) {
+export function initVoice(onData, onUserMediaError) {
   getUserMedia({ audio: true }, (err, userMedia) => {
     if (err) {
       onUserMediaError(err)

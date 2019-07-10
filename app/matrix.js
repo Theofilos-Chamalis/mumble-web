@@ -3,12 +3,12 @@
 // [Widget]: https://docs.google.com/document/d/1uPF7XWY_dXTKVKV7jZQ2KmsI19wn9-kFRgQ1tFQP7wQ/edit
 
 class MatrixWidget {
-  constructor () {
+  constructor() {
     this.widgetId = null
     window.addEventListener('message', this.onMessage.bind(this))
   }
 
-  onMessage (event) {
+  onMessage(event) {
     this.widgetId = this.widgetId || event.data.widgetId
 
     switch (event.data.api) {
@@ -28,13 +28,13 @@ class MatrixWidget {
     }
   }
 
-  sendContentLoaded () {
+  sendContentLoaded() {
     this.sendMessage({
       action: 'content_loaded'
     })
   }
 
-  setAlwaysOnScreen (value) {
+  setAlwaysOnScreen(value) {
     // Extension of main spec, see https://github.com/matrix-org/matrix-doc/issues/1354
     this.sendMessage({
       action: 'set_always_on_screen',
@@ -43,7 +43,7 @@ class MatrixWidget {
     })
   }
 
-  sendMessage (message) {
+  sendMessage(message) {
     if (!this.widgetId) return
     message.api = message.api || 'fromWidget'
     message.widgetId = message.widgetId || this.widgetId
@@ -51,7 +51,7 @@ class MatrixWidget {
     window.parent.postMessage(message, '*')
   }
 
-  sendResponse (event, response) {
+  sendResponse(event, response) {
     event.data.response = response
     event.source.postMessage(event.data, event.origin)
   }

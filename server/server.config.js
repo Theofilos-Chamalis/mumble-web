@@ -1,5 +1,5 @@
 // Web App Server configuration and https (letsencrypt is recommended) certificate path
-const PORT_HTTP = 80;
+const PORT_HTTP = 8000;
 const PORT_HTTPS = 443;
 const serverProjectPath = '/root/mumble-web';
 const certificatesPath = serverProjectPath + '/data/letsencrypt/';

@@ -21,7 +21,7 @@ export default function (self) {
   let voiceStreams = []
   let clients = []
 
-  function postMessage (msg, transfer) {
+  function postMessage(msg, transfer) {
     try {
       self.postMessage(msg, transfer)
     } catch (err) {
@@ -30,14 +30,14 @@ export default function (self) {
     }
   }
 
-  function resolve (reqId, value, transfer) {
+  function resolve(reqId, value, transfer) {
     postMessage({
       reqId: reqId,
       result: value
     }, transfer)
   }
 
-  function reject (reqId, value, transfer) {
+  function reject(reqId, value, transfer) {
     console.error(value)
     let jsonValue = JSON.parse(JSON.stringify(value))
     if (value.$type) {
@@ -49,7 +49,7 @@ export default function (self) {
     }, transfer)
   }
 
-  function registerEventProxy (id, obj, event, transform) {
+  function registerEventProxy(id, obj, event, transform) {
     obj.on(event, function (_) {
       postMessage({
         clientId: id.client,
@@ -61,7 +61,7 @@ export default function (self) {
     })
   }
 
-  function pushProp (id, obj, prop, transform) {
+  function pushProp(id, obj, prop, transform) {
     let value = obj[prop]
     postMessage({
       clientId: id.client,
@@ -72,7 +72,7 @@ export default function (self) {
     })
   }
 
-  function setupOutboundVoice (voiceId, samplesPerPacket, stream) {
+  function setupOutboundVoice(voiceId, samplesPerPacket, stream) {
     let resampler = new Resampler({
       unsafe: true,
       type: Resampler.Type.SINC_FASTEST,
@@ -80,7 +80,7 @@ export default function (self) {
     })
 
     let buffer2Float32Array = new Transform({
-      transform (data, _, callback) {
+      transform(data, _, callback) {
         callback(null, new Float32Array(data.buffer, data.byteOffset, data.byteLength / 4))
       },
       readableObjectMode: true
@@ -94,7 +94,7 @@ export default function (self) {
     voiceStreams[voiceId] = resampler
   }
 
-  function setupChannel (id, channel) {
+  function setupChannel(id, channel) {
     id = Object.assign({}, id, { channel: channel.id })
 
     registerEventProxy(id, channel, 'update', (actor, props) => {
@@ -127,7 +127,7 @@ export default function (self) {
     return channel.id
   }
 
-  function setupUser (id, user) {
+  function setupUser(id, user) {
     id = Object.assign({}, id, { user: user.id })
 
     registerEventProxy(id, user, 'update', (actor, props) => {
@@ -190,7 +190,7 @@ export default function (self) {
     return user.id
   }
 
-  function setupClient (id, client) {
+  function setupClient(id, client) {
     id = { client: id }
 
     registerEventProxy(id, client, 'error')
@@ -221,7 +221,7 @@ export default function (self) {
     pushProp(id, client, 'maxBandwidth')
   }
 
-  function onMessage (data) {
+  function onMessage(data) {
     let { reqId, method, payload } = data
     if (method === '_init') {
       sampleRate = data.sampleRate

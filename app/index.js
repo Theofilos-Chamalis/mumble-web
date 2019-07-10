@@ -14,13 +14,13 @@ import { ContinuousVoiceHandler, PushToTalkVoiceHandler, VADVoiceHandler, initVo
 
 const dompurify = _dompurify(window)
 
-function sanitize (html) {
+function sanitize(html) {
   return dompurify.sanitize(html, {
     ALLOWED_TAGS: ['br', 'b', 'i', 'u', 'a', 'span', 'p']
   })
 }
 
-function openContextMenu (event, contextMenu, target) {
+function openContextMenu(event, contextMenu, target) {
   contextMenu.posX(event.clientX)
   contextMenu.posY(event.clientY)
   contextMenu.target(target)
@@ -41,14 +41,14 @@ function openContextMenu (event, contextMenu, target) {
 
 // GUI
 
-function ContextMenu () {
+function ContextMenu() {
   var self = this
   self.posX = ko.observable()
   self.posY = ko.observable()
   self.target = ko.observable()
 }
 
-function ConnectDialog () {
+function ConnectDialog() {
   var self = this
   self.address = ko.observable('')
   self.port = ko.observable('')
@@ -65,7 +65,7 @@ function ConnectDialog () {
   }
 }
 
-function ConnectErrorDialog (connectDialog) {
+function ConnectErrorDialog(connectDialog) {
   var self = this
   self.type = ko.observable(0)
   self.reason = ko.observable('')
@@ -82,7 +82,7 @@ function ConnectErrorDialog (connectDialog) {
 }
 
 class ConnectionInfo {
-  constructor (ui) {
+  constructor(ui) {
     this._ui = ui
     this.visible = ko.observable(false)
     this.serverVersion = ko.observable()
@@ -104,7 +104,7 @@ class ConnectionInfo {
     this.hide = () => this.visible(false)
   }
 
-  update () {
+  update() {
     let client = this._ui.client
 
     this.serverVersion(client.serverVersion)
@@ -130,7 +130,7 @@ class ConnectionInfo {
   }
 }
 
-function CommentDialog () {
+function CommentDialog() {
   var self = this
   self.visible = ko.observable(false)
   self.show = function () {
@@ -139,7 +139,7 @@ function CommentDialog () {
 }
 
 class SettingsDialog {
-  constructor (settings) {
+  constructor(settings) {
     this.voiceMode = ko.observable(settings.voiceMode)
     this.pttKey = ko.observable(settings.pttKey)
     this.pttKeyDisplay = ko.observable(settings.pttKey)
@@ -164,7 +164,7 @@ class SettingsDialog {
     this.vadLevel.subscribe(() => this._setupTestVad())
   }
 
-  _setupTestVad () {
+  _setupTestVad() {
     if (this._testVad) {
       this._testVad.end()
     }
@@ -172,12 +172,12 @@ class SettingsDialog {
     this.applyTo(dummySettings)
     this._testVad = new VADVoiceHandler(null, dummySettings)
     this._testVad.on('started_talking', () => this.testVadActive(true))
-                 .on('stopped_talking', () => this.testVadActive(false))
-                 .on('level', level => this.testVadLevel(level))
+      .on('stopped_talking', () => this.testVadActive(false))
+      .on('level', level => this.testVadLevel(level))
     testVoiceHandler = this._testVad
   }
 
-  applyTo (settings) {
+  applyTo(settings) {
     settings.voiceMode = this.voiceMode()
     settings.pttKey = this.pttKey()
     settings.vadLevel = this.vadLevel()
@@ -187,12 +187,12 @@ class SettingsDialog {
     settings.samplesPerPacket = this.samplesPerPacket()
   }
 
-  end () {
+  end() {
     this._testVad.end()
     testVoiceHandler = null
   }
 
-  recordPttKey () {
+  recordPttKey() {
     var combo = []
     const keydown = e => {
       combo = e.pressedKeys
@@ -212,7 +212,7 @@ class SettingsDialog {
     this.pttKeyDisplay('> ? <')
   }
 
-  totalBandwidth () {
+  totalBandwidth() {
     return MumbleClient.calcEnforcableBandwidth(
       this.audioBitrate(),
       this.samplesPerPacket(),
@@ -220,7 +220,7 @@ class SettingsDialog {
     )
   }
 
-  positionBandwidth () {
+  positionBandwidth() {
     return this.totalBandwidth() - MumbleClient.calcEnforcableBandwidth(
       this.audioBitrate(),
       this.samplesPerPacket(),
@@ -228,7 +228,7 @@ class SettingsDialog {
     )
   }
 
-  overheadBandwidth () {
+  overheadBandwidth() {
     return MumbleClient.calcEnforcableBandwidth(
       0,
       this.samplesPerPacket(),
@@ -238,7 +238,7 @@ class SettingsDialog {
 }
 
 class Settings {
-  constructor (defaults) {
+  constructor(defaults) {
     const load = key => window.localStorage.getItem('mumble.' + key)
     this.voiceMode = load('voiceMode') || defaults.voiceMode
     this.pttKey = load('pttKey') || defaults.pttKey
@@ -250,7 +250,7 @@ class Settings {
     this.samplesPerPacket = Number(load('samplesPerPacket')) || defaults.samplesPerPacket
   }
 
-  save () {
+  save() {
     const save = (key, val) => window.localStorage.setItem('mumble.' + key, val)
     save('voiceMode', this.voiceMode)
     save('pttKey', this.pttKey)
@@ -264,7 +264,7 @@ class Settings {
 }
 
 class GlobalBindings {
-  constructor (config) {
+  constructor(config) {
     this.config = config
     this.settings = new Settings(config.settings)
     this.connector = new WorkerBasedMumbleConnector()
@@ -831,7 +831,7 @@ class GlobalBindings {
         channel.linked(allLinked.indexOf(channel.model) !== -1)
       })
 
-      function findLinks (channel, knownLinks) {
+      function findLinks(channel, knownLinks) {
         knownLinks.push(channel)
         channel.links.forEach(next => {
           if (next && knownLinks.indexOf(next) === -1) {
@@ -846,7 +846,7 @@ class GlobalBindings {
         return knownLinks
       }
 
-      function getAllChannels (channel, channels) {
+      function getAllChannels(channel, channels) {
         channels.push(channel)
         channel.channels().forEach(next => getAllChannels(next, channels))
         return channels
@@ -935,7 +935,7 @@ window.onload = function () {
 window.onresize = () => ui.updateSize()
 ui.updateSize()
 
-function log () {
+function log() {
   console.log.apply(console, arguments)
   var args = []
   for (var i = 0; i < arguments.length; i++) {
@@ -947,18 +947,18 @@ function log () {
   })
 }
 
-function compareChannels (c1, c2) {
+function compareChannels(c1, c2) {
   if (c1.position() === c2.position()) {
     return c1.name() === c2.name() ? 0 : c1.name() < c2.name() ? -1 : 1
   }
   return c1.position() - c2.position()
 }
 
-function compareUsers (u1, u2) {
+function compareUsers(u1, u2) {
   return u1.name() === u2.name() ? 0 : u1.name() < u2.name() ? -1 : 1
 }
 
-function userToState () {
+function userToState() {
   var flags = []
   // TODO: Friend
   if (this.uid()) {
