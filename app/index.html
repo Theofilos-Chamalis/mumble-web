@@ -30,7 +30,7 @@
     <!-- ko with: connectDialog -->
     <div class="connect-dialog dialog" data-bind="visible: visible() && !joinOnly()">
       <div class="dialog-header">
-        Connect to Server
+        Connect to a Voice Server
       </div>
       <form data-bind="submit: connect">
         <table>
@@ -398,8 +398,8 @@
       </script>
     <div class="toolbar" data-bind="css: { 'toolbar-horizontal': toolbarHorizontal(),
                                              'toolbar-vertical': !toolbarHorizontal() }">
-      <img class="handle-horizontal" src="/svg/handle_horizontal.svg" data-bind="click: toggleToolbarOrientation">
-      <img class="handle-vertical" src="/svg/handle_vertical.svg" data-bind="click: toggleToolbarOrientation">
+      <!-- <img class="handle-horizontal" src="/svg/handle_horizontal.svg" data-bind="click: toggleToolbarOrientation"> -->
+      <!-- <img class="handle-vertical" src="/svg/handle_vertical.svg" data-bind="click: toggleToolbarOrientation"> -->
       <img class="tb-connect" data-bind="visible: !connectDialog.joinOnly(),
                                            click: connectDialog.show" rel="connect"
         src="/svg/applications-internet.svg">
@@ -423,7 +423,7 @@
       <div class="divider"></div>
       <img class="tb-settings" data-bind="click: openSettings" rel="settings" src="/svg/config_basic.svg">
       <div class="divider"></div>
-      <img class="tb-sourcecode" data-bind="click: openSourceCode" rel="Source Code" src="/svg/source-code.svg">
+      <!-- <img class="tb-sourcecode" data-bind="click: openSourceCode" rel="Source Code" src="/svg/source-code.svg"> -->
     </div>
     <div class="chat">
       <script type="text/html" id="log-generic">
