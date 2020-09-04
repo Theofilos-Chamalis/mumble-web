@@ -33,7 +33,7 @@
     "brfs": "^2.0.2",
     "bytebuffer": "^5.0.1",
     "css-loader": "^3.0.0",
-    "dompurify": "^1.0.11",
+    "dompurify": "^2.0.15",
     "drop-stream": "^1.0.0",
     "duplex-maker": "^1.0.0",
     "extract-loader": "^0.1.0",
